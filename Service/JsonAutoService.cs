@@ -278,7 +278,7 @@ namespace JsonAutoService.Service
             };
         }
 
-        public async Task<ContentResult> ActionContextResultAsync(ActionContext context, string procName, IDictionary<string, object> addToHeaderse=null, string body=null)
+        public async Task<ContentResult> ActionContextResultAsync(ActionContext context, string procName, IDictionary<string, object> addToHeaders=null, string body=null
         {
             var httpContext = context.HttpContext;
             var request = httpContext.Request;
@@ -289,8 +289,8 @@ namespace JsonAutoService.Service
 
             //Serialize Headers
             var headerDictionary = GetHeadersDictionary(request.Headers, user);
-            if (addToHeaderse != null)
-                headerDictionary.Concat(addToHeaderse).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            if (addToHeaders != null)
+                addToHeaders.ToList().ForEach(h => headerDictionary.Add(h.Key, h.Value));
             var jsonHeaders = JsonConvert.SerializeObject(headerDictionary);
 
             var conString = httpContext.Items[_options.ConnectionStringName].ToString();
