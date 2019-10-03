@@ -7,17 +7,17 @@ namespace JsonAutoService.Structures
     {
         public bool IsValid
         {
-            get => Bit;
+            get => Bit.IsNull ? false : (bool)Bit;
             set => throw new NotImplementedException();
         }
 
-        public bool Bit { get; }
-        public string Body { get; }
+        public SqlBoolean Bit { get; }
+        public SqlString Body { get; }
 
-        public DeleteResult(SqlBoolean sqlBit, SqlString body)
+        public DeleteResult(SqlBoolean sqlBoolean, SqlString body)
         {
-            Bit = (bool)sqlBit;
-            Body = (string)body;
+            Bit = sqlBoolean;
+            Body = body;
         }
     }
 }

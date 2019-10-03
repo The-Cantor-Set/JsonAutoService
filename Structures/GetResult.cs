@@ -7,15 +7,15 @@ namespace JsonAutoService.Structures
     {
         public bool IsValid
         {
-            get => Convert.ToBoolean(Body.Length);
+            get => Body.IsNull ? false : (bool)Body.ToSqlBoolean();
             set => throw new NotImplementedException();
         }
 
-        public string Body { get; }
+        public SqlString Body { get; }
 
         public GetResult(SqlString body)
         {
-            Body = (string)body;
+            Body = body;
         }
     }
 }

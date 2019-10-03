@@ -196,14 +196,14 @@ namespace JsonAutoService.Service
             {
                 return new ContentResult
                 {
-                    StatusCode = StatusCodes.Status204NoContent,
-                    Content = putResponse.Body,
+                    StatusCode = StatusCodes.Status201Created,
+                    Content = putResponse.Body.ToString(),
                     ContentType = MediaTypeNames.Application.Json
                 };
             }
             else
             {
-                var errorResult = JsonConvert.DeserializeObject<ErrorResult>(putResponse.Body);
+                var errorResult = JsonConvert.DeserializeObject<ErrorResult>(putResponse.Body.ToString());
                 var errorMessage = ErrorMessage(mode, errorThreshold, errorResult, SupportedMethods.PUT);
 
                 return new ContentResult
@@ -221,14 +221,14 @@ namespace JsonAutoService.Service
             {
                 return new ContentResult
                 {
-                    StatusCode = StatusCodes.Status204NoContent,
-                    Content = deleteResponse.Body,
+                    StatusCode = StatusCodes.Status201Created,
+                    Content = deleteResponse.Body.ToString(),
                     ContentType = MediaTypeNames.Application.Json
                 };
             }
             else
             {
-                var errorResult = JsonConvert.DeserializeObject<ErrorResult>(deleteResponse.Body);
+                var errorResult = JsonConvert.DeserializeObject<ErrorResult>(deleteResponse.Body.ToString());
                 var errorMessage = ErrorMessage(mode, errorThreshold, errorResult, SupportedMethods.DELETE);
 
                 return new ContentResult
@@ -300,7 +300,7 @@ namespace JsonAutoService.Service
             {
                 case nameof(SupportedMethods.GET):
                     var sqlGetResult = new GetResult(await SqlGetAsync(conString, jsonHeaders, procName, jsonRoutes));
-                    return JsonGetContentResult(sqlGetResult.Body);
+                    return JsonGetContentResult(sqlGetResult.Body.ToString());
                 case nameof(SupportedMethods.PUT):
                     var sqlPutResult = await SqlPutAsync(conString, jsonHeaders, procName, jsonRoutes, body);
                     return JsonPutContentResult(sqlPutResult, _options.Mode, _options.ErrorThreshold);
