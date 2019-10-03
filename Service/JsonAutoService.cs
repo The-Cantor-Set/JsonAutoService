@@ -85,7 +85,7 @@ namespace JsonAutoService.Service
                 await sqlCon.OpenAsync();
                 await sqlCmd.ExecuteNonQueryAsync();
                 sqlCon.Close();
-                return new PutResult((SqlBoolean)t.Value, (SqlString)r.Value);
+                return new PutResult((SqlBoolean)t.SqlValue, (SqlString)r.SqlValue);
             }
         }
 
@@ -138,7 +138,7 @@ namespace JsonAutoService.Service
                 r.Direction = ParameterDirection.Output;
 
                 await sqlCon.OpenAsync();
-                var x = await sqlCmd.ExecuteNonQueryAsync();
+                await sqlCmd.ExecuteNonQueryAsync();
                 sqlCon.Close();
                 return new DeleteResult((SqlBoolean)t.SqlValue, (SqlString)r.SqlValue);
             }
