@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace JsonAutoService.ResourceHandlers
 {
@@ -14,17 +15,20 @@ namespace JsonAutoService.ResourceHandlers
     {
         private readonly JsonAutoServiceOptions _options;
         private readonly IJsonAutoService _jsonAutoService;
-        private readonly string procName;
+        private readonly string _procName;
+        private ILogger _logger;
 
-        public JsonResourceResultsHandler(IOptionsMonitor<JsonAutoServiceOptions> options, IJsonAutoService jsonAutoService, object procName)
+        public JsonResourceResultsHandler(IOptionsMonitor<JsonAutoServiceOptions> options, IJsonAutoService jsonAutoService, object procName,ILoggerFactory loggerFactory)
         {
-            this._options = options.CurrentValue;
-            this._jsonAutoService = jsonAutoService;
-            this.procName = procName.ToString();
+            _options = options.CurrentValue;
+            _jsonAutoService = jsonAutoService;
+            _procName = procName.ToString();
+            _logger = loggerFactory.CreateLogger<JsonResourceResultsHandler>();
         }
 
         public async Task OnResourceExecutionAsync(ResourceExecutingContext context, ResourceExecutionDelegate next)
         {
+            _logger.LogInformation("Entered OnResourceExecutionAsync() method");
             var httpContext = context.HttpContext;
             var request = httpContext.Request;
             var user = httpContext.User;
@@ -47,24 +51,34 @@ namespace JsonAutoService.ResourceHandlers
                 switch (request.Method)
                 {
                     case nameof(SupportedMethods.GET):
-                        var getResponse = await _jsonAutoService.SqlGetAsync(sqlConnection, jsonHeaders, procName, jsonRoutes);
+                        _logger.LogInformation($"Executing GET request for {_procName} in db {sqlConnection}");
+                        var getResponse = await _jsonAutoService.SqlGetAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes);
                         context.Result = _jsonAutoService.JsonGetContentResult((string)getResponse);
+                        _logger.LogInformation("Result retrieved");
                         break;
                     case nameof(SupportedMethods.PUT):
-                        var putResponse = await _jsonAutoService.SqlPutAsync(sqlConnection, jsonHeaders, procName, jsonRoutes, body);
+                        _logger.LogInformation($"Executing PUT request for {_procName} in db {sqlConnection}");
+                        var putResponse = await _jsonAutoService.SqlPutAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes, body);
                         context.Result = _jsonAutoService.JsonPutContentResult(putResponse, _options.Mode, _options.ErrorThreshold);
+                        _logger.LogInformation("Result retrieved");
                         break;
                     case nameof(SupportedMethods.POST):
-                        var postResponse = await _jsonAutoService.SqlPostAsync(sqlConnection, jsonHeaders, procName, jsonRoutes, body);
+                        _logger.LogInformation($"Executing POST request for {_procName} in db {sqlConnection}");
+                        var postResponse = await _jsonAutoService.SqlPostAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes, body);
                         context.Result = _jsonAutoService.JsonPostContentResult(postResponse, _options.Mode, _options.ErrorThreshold);
+                        _logger.LogInformation("Result retrieved");
                         break;
                     case nameof(SupportedMethods.DELETE):
-                        var deleteResponse = await _jsonAutoService.SqlDeleteAsync(sqlConnection, jsonHeaders, procName, jsonRoutes);
+                        _logger.LogInformation($"Executing DELETE request for {_procName} in db {sqlConnection}");
+                        var deleteResponse = await _jsonAutoService.SqlDeleteAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes);
                         context.Result = _jsonAutoService.JsonDeleteContentResult(deleteResponse, _options.Mode, _options.ErrorThreshold);
+                        _logger.LogInformation("Result retrieved");
                         break;
                     case nameof(SupportedMethods.HEAD):
-                        var headResponse = await _jsonAutoService.SqlHeadAsync(sqlConnection, jsonHeaders, procName, jsonRoutes);
+                        _logger.LogInformation($"Executing HEAD request for {_procName} in db {sqlConnection}");
+                        var headResponse = await _jsonAutoService.SqlHeadAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes);
                         context.Result = _jsonAutoService.JsonHeadContentResult((bool)headResponse);
+                        _logger.LogInformation("Result retrieved");
                         break;
                     default:
                         context.Result = _jsonAutoService.JsonDefaultContentResult();
