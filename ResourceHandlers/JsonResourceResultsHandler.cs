@@ -31,7 +31,6 @@ namespace JsonAutoService.ResourceHandlers
         public async Task OnResourceExecutionAsync(ResourceExecutingContext context, ResourceExecutionDelegate next)
         {
             _logger.LogInformation("Entered OnResourceExecutionAsync() method of JsonResourceResultsHandler");
-            Console.WriteLine("Entered OnResourceExecutionAsync() method of JsonResourceResultsHandler");
             var httpContext = context.HttpContext;
             var request = httpContext.Request;
             var user = httpContext.User;
@@ -58,7 +57,6 @@ namespace JsonAutoService.ResourceHandlers
                 {
                     case nameof(SupportedMethods.GET):
                         _logger.LogInformation($"Executing GET request for {_procName} in db {sqlConnection}");
-                        Console.WriteLine($"Executing GET request for {_procName} in db {sqlConnection}");
                         stopWatch.Start();
                         var getResponse = await _jsonAutoService.SqlGetAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes);
                         context.Result = _jsonAutoService.JsonGetContentResult((string)getResponse);
@@ -68,11 +66,10 @@ namespace JsonAutoService.ResourceHandlers
                             ts1.Hours, ts1.Minutes, ts1.Seconds,
                             ts1.Milliseconds / 10);
                         _logger.LogInformation($"Result retrieved in {elapsedTime1}");
-                        Console.WriteLine($"Result retrieved in {elapsedTime1}");
+                        stopWatch.Reset();
                         break;
                     case nameof(SupportedMethods.PUT):
                         _logger.LogInformation($"Executing PUT request for {_procName} in db {sqlConnection}");
-                        Console.WriteLine($"Executing PUT request for {_procName} in db {sqlConnection}");
                         stopWatch.Start();
                         var putResponse = await _jsonAutoService.SqlPutAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes, body);
                         context.Result = _jsonAutoService.JsonPutContentResult(putResponse, _options.Mode, _options.ErrorThreshold);
@@ -82,11 +79,11 @@ namespace JsonAutoService.ResourceHandlers
                             ts2.Hours, ts2.Minutes, ts2.Seconds,
                             ts2.Milliseconds / 10);
                         _logger.LogInformation($"Result retrieved in {elapsedTime2}");
-                        Console.WriteLine($"Result retrieved in {elapsedTime2}");
+                        stopWatch.Reset();
                         break;
                     case nameof(SupportedMethods.POST):
                         _logger.LogInformation($"Executing POST request for {_procName} in db {sqlConnection}");
-                        Console.WriteLine();
+                        stopWatch.Start();
                         var postResponse = await _jsonAutoService.SqlPostAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes, body);
                         context.Result = _jsonAutoService.JsonPostContentResult(postResponse, _options.Mode, _options.ErrorThreshold);
                         stopWatch.Stop();
@@ -95,11 +92,11 @@ namespace JsonAutoService.ResourceHandlers
                             ts3.Hours, ts3.Minutes, ts3.Seconds,
                             ts3.Milliseconds / 10);
                         _logger.LogInformation($"Result retrieved in {elapsedTime3}");
-                        Console.WriteLine($"Result retrieved in {elapsedTime3}");
+                        stopWatch.Reset();
                         break;
                     case nameof(SupportedMethods.DELETE):
                         _logger.LogInformation($"Executing DELETE request for {_procName} in db {sqlConnection}");
-                        Console.WriteLine();
+                        stopWatch.Start();
                         var deleteResponse = await _jsonAutoService.SqlDeleteAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes);
                         context.Result = _jsonAutoService.JsonDeleteContentResult(deleteResponse, _options.Mode, _options.ErrorThreshold);
                         stopWatch.Stop();
@@ -108,11 +105,11 @@ namespace JsonAutoService.ResourceHandlers
                             ts4.Hours, ts4.Minutes, ts4.Seconds,
                             ts4.Milliseconds / 10);
                         _logger.LogInformation($"Result retrieved in {elapsedTime4}");
-                        Console.WriteLine($"Result retrieved in {elapsedTime4}");
+                        stopWatch.Reset();
                         break;
                     case nameof(SupportedMethods.HEAD):
                         _logger.LogInformation($"Executing HEAD request for {_procName} in db {sqlConnection}");
-                        Console.WriteLine();
+                        stopWatch.Start();
                         var headResponse = await _jsonAutoService.SqlHeadAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes);
                         context.Result = _jsonAutoService.JsonHeadContentResult((bool)headResponse);
                         stopWatch.Stop();
@@ -121,7 +118,7 @@ namespace JsonAutoService.ResourceHandlers
                             ts5.Hours, ts5.Minutes, ts5.Seconds,
                             ts5.Milliseconds / 10);
                         _logger.LogInformation($"Result retrieved in {elapsedTime5}");
-                        Console.WriteLine($"Result retrieved in {elapsedTime5}");
+                        stopWatch.Reset();
                         break;
                     default:
                         context.Result = _jsonAutoService.JsonDefaultContentResult();
