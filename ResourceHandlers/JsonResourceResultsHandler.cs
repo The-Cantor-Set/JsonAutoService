@@ -15,14 +15,14 @@ namespace JsonAutoService.ResourceHandlers
     {
         private readonly JsonAutoServiceOptions _options;
         private readonly IJsonAutoService _jsonAutoService;
-        private ILogger _logger;
+        private ILogger<JsonResourceResultsHandler> _logger;
         private readonly string _procName;
 
-        public JsonResourceResultsHandler(IOptionsMonitor<JsonAutoServiceOptions> options, IJsonAutoService jsonAutoService, object procName,ILoggerFactory loggerFactory)
+        public JsonResourceResultsHandler(IOptionsMonitor<JsonAutoServiceOptions> options, IJsonAutoService jsonAutoService, object procName, ILogger<JsonResourceResultsHandler> logger)
         {
             _options = options.CurrentValue;
             _jsonAutoService = jsonAutoService;
-            _logger = loggerFactory.CreateLogger<JsonResourceResultsHandler>();
+            _logger = logger;
             _procName = procName.ToString();
             
         }
