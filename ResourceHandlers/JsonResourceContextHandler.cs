@@ -16,10 +16,10 @@ namespace JsonAutoService.ResourceHandlers
     {
         private readonly JsonAutoServiceOptions _options;
         private readonly IJsonAutoService _jsonAutoService;
-        private readonly ILogger _logger;
+        private readonly ILogger<JsonResourceContextHandler> _logger;
         private readonly string procName;
 
-        public JsonResourceContextHandler(IOptionsMonitor<JsonAutoServiceOptions> options, IJsonAutoService jsonAutoService, object procName, ILogger logger)
+        public JsonResourceContextHandler(IOptionsMonitor<JsonAutoServiceOptions> options, IJsonAutoService jsonAutoService, object procName, ILogger<JsonResourceContextHandler> logger)
         {
             this._options = options.CurrentValue;
             this._jsonAutoService = jsonAutoService;
