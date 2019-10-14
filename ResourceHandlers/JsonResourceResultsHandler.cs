@@ -83,8 +83,12 @@ namespace JsonAutoService.ResourceHandlers
                         break;
                     case nameof(SupportedMethods.POST):
                         _logger.LogInformation($"Executing POST request for {_procName} in db {sqlConnection}");
+                        _logger.LogInformation($"jsonHeaders: {jsonHeaders}");
+                        _logger.LogInformation($"jsonRoutes: {jsonRoutes}");
+                        _logger.LogInformation($"body: {body}");
                         stopWatch.Start();
                         var postResponse = await _jsonAutoService.SqlPostAsync(sqlConnection, jsonHeaders, _procName, jsonRoutes, body);
+                        _logger.LogInformation($"Retrieved postResponse: {postResponse.Body.Value}");
                         context.Result = _jsonAutoService.JsonPostContentResult(postResponse, _options.Mode, _options.ErrorThreshold);
                         stopWatch.Stop();
                         var ts3 = stopWatch.Elapsed;
