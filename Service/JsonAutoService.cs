@@ -340,51 +340,26 @@ namespace JsonAutoService.Service
 
         public Dictionary<string, object> GetHeadersDictionary(IHeaderDictionary headers, ClaimsPrincipal user)
         {
-            _logger.LogInformation($"Executing GetHeadersDictionary() method");
-            _logger.LogInformation($"Received headers:");
-            foreach (var header in headers)
-            {
-                _logger.LogInformation($"{header.Key}:{header.Value}");
-            }
-            
             var headerPairs = new Dictionary<string, object>();
             if (user.Identity.IsAuthenticated)
             {
-                _logger.LogInformation("User is authenticated");
                 //Add identity from ClaimsPrincipal
                 foreach (var identityHeader in _options.IdentityClaims)
                 {
-                    _logger.LogInformation("Adding identity header:");
                     headerPairs.Add(identityHeader.Value, user.FindFirst(identityHeader.Value).Value);
-                    _logger.LogInformation($"{identityHeader.Value}:{user.FindFirst(identityHeader.Value).Value}");
                 }
             }
-            _logger.LogInformation("options.RequiredHeaders:");
-            foreach (var reqHeader in _options.RequiredHeaders)
-            {
-                _logger.LogInformation($"{reqHeader.Key}:{reqHeader.Value}");
-            }
+            
             foreach (var header in headers)
             {
-                _logger.LogInformation($"Processing header {header.Key} with value: {header.Value}");
                 // transpose key/value if a required header
                 if (_options.RequiredHeaders.ContainsKey(header.Key))
                 {
                     headerPairs.Add(_options.RequiredHeaders[header.Key].ToString(), (string)header.Value);
-                    _logger.LogInformation($"Header {header.Key} with value: {header.Value} added into dictionary");
                 }
-                else
-                {
-                    _logger.LogInformation($"Header {header.Key} with value: {header.Value} skipped");
-                }
-                    
+
             }
             
-            _logger.LogInformation("headerPairs:");
-            foreach (var pair in headerPairs)
-            {
-                _logger.LogInformation($"{pair.Key}:{pair.Value}");
-            }
             return headerPairs;
         }
     }
