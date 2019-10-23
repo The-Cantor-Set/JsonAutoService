@@ -48,7 +48,7 @@ namespace JsonAutoService.ResourceHandlers
                 {
                     case nameof(SupportedMethods.GET):
                         var getResponse = await _jsonAutoService.SqlGetAsync(sqlConnection, jsonHeaders, procName, jsonRoutes);
-                        context.Result = _jsonAutoService.JsonGetContentResult((string)getResponse);
+                        context.Result = _jsonAutoService.JsonGetContentResult(getResponse.ToString());
                         break;
                     case nameof(SupportedMethods.PUT):
                         var putResponse = await _jsonAutoService.SqlPutAsync(sqlConnection, jsonHeaders, procName, jsonRoutes, body);
