@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using JsonAutoService.Structures;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -22,10 +23,12 @@ namespace JsonAutoService.Service
     /// </summary>
     public partial class JsonAutoService : IJsonAutoService
     {
+        private readonly ILogger<JsonAutoServiceOptions> _logger;
         private readonly JsonAutoServiceOptions _options;
 
-        public JsonAutoService(IOptionsMonitor<JsonAutoServiceOptions> options)
+        public JsonAutoService(IOptionsMonitor<JsonAutoServiceOptions> options, ILogger<JsonAutoServiceOptions> logger)
         {
+            _logger = logger;
             this._options = options.CurrentValue;
         }
 
@@ -346,14 +349,17 @@ namespace JsonAutoService.Service
                     headerPairs.Add(identityHeader.Value, user.FindFirst(identityHeader.Value).Value);
                 }
             }
-
+            
             foreach (var header in headers)
             {
                 // transpose key/value if a required header
                 if (_options.RequiredHeaders.ContainsKey(header.Key))
+                {
                     headerPairs.Add(_options.RequiredHeaders[header.Key].ToString(), (string)header.Value);
-            }
+                }
 
+            }
+            
             return headerPairs;
         }
     }
