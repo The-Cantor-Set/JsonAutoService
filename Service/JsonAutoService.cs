@@ -94,6 +94,8 @@ namespace JsonAutoService.Service
 
         public async Task<PostResult> SqlPostAsync(string conString, string jsonHeaders, string procName, string jsonParams, string jsonBody)
         {
+            _logger.LogInformation($"Sql Post params: {conString}, {jsonHeaders}, {procName}, {jsonParams}, {jsonBody}");
+
             using (var sqlCon = new SqlConnection(conString))
             using (var sqlCmd = new SqlCommand(procName, sqlCon))
             {
