@@ -7,7 +7,7 @@ namespace JsonAutoService.Structures
     {
         public bool IsValid
         {
-            get => Body.IsNull ? false : Body.IsNull;
+            get => !Body.IsNull;
             set => throw new NotImplementedException();
         }
 
