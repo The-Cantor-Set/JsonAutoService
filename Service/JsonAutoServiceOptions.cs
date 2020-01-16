@@ -4,7 +4,7 @@ namespace JsonAutoService.Service
 {
     public class JsonAutoServiceOptions 
     {
-        public string ConnectionStringName { get; set; }
+        public string ConnectionString { get; set; }
         public string Mode { get; set;  }
         public int ErrorThreshold { get; set; }
         public IDictionary<string, string> DefaultErrorMessages { get; set; }

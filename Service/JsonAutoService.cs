@@ -18,7 +18,7 @@ namespace JsonAutoService.Service
 {
     /// <summary>
     /// 
-    /// A simple C# library to automate remote procedure calls.  This is the Sql Server implementation.
+    /// C# library to automate the creation of remote procedure calls.  This is the Sql Server implementation.
     /// 
     /// </summary>
     public partial class JsonAutoService : IJsonAutoService
@@ -95,6 +95,40 @@ namespace JsonAutoService.Service
         public async Task<PostResult> SqlPostAsync(string conString, string jsonHeaders, string procName, string jsonParams, string jsonBody)
         {
             _logger.LogInformation($"Sql Post params: {conString}, {jsonHeaders}, {procName}, {jsonParams}, {jsonBody}");
+
+            using (var sqlCon = new SqlConnection(conString))
+            using (var sqlCmd = new SqlCommand(procName, sqlCon))
+            {
+                sqlCmd.CommandType = CommandType.StoredProcedure;
+
+                var h = sqlCmd.Parameters.Add("@headers", SqlDbType.NVarChar, -1);
+                h.Direction = ParameterDirection.Input;
+                h.Value = jsonHeaders;
+                var p = sqlCmd.Parameters.Add("@params", SqlDbType.NVarChar, -1);
+                p.Direction = ParameterDirection.Input;
+                p.Value = jsonParams;
+                var b = sqlCmd.Parameters.Add("@body", SqlDbType.NVarChar, -1);
+                b.Direction = ParameterDirection.Input;
+                b.Value = jsonBody;
+
+                var t_id = sqlCmd.Parameters.Add("@test_id", SqlDbType.BigInt);
+                t_id.Direction = ParameterDirection.Output;
+                var r = sqlCmd.Parameters.Add("@response", SqlDbType.NVarChar, -1);
+                r.Direction = ParameterDirection.Output;
+
+                await sqlCon.OpenAsync();
+                await sqlCmd.ExecuteNonQueryAsync();
+                sqlCon.Close();
+                return new PostResult((SqlInt64)t_id.SqlValue, (SqlString)r.SqlValue);
+            }
+        }
+
+        public async Task<PostResult> SqlPostAsync(ActionContext context, string jsonHeaders, string procName, string jsonParams, string jsonBody)
+        {
+            _logger.LogInformation($"Sql Post params: {jsonHeaders}, {procName}, {jsonParams}, {jsonBody}");
+
+            var conString = _options.ConnectionString;
+            //var conString = context.HttpContext.Items[_options.ConnectionStringName].ToString();
 
             using (var sqlCon = new SqlConnection(conString))
             using (var sqlCmd = new SqlCommand(procName, sqlCon))
@@ -298,7 +332,8 @@ namespace JsonAutoService.Service
                 addToHeaders.ToList().ForEach(h => headerDictionary.Add(h.Key, h.Value));
             var jsonHeaders = JsonConvert.SerializeObject(headerDictionary);
 
-            var conString = httpContext.Items[_options.ConnectionStringName].ToString();
+            var conString = _options.ConnectionString;
+            //var conString = httpContext.Items[_options.ConnectionStringName].ToString();
 
             // execute sql based on method type and return contentResult
             switch (httpContext.Request.Method)

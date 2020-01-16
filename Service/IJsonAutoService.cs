@@ -11,9 +11,14 @@ namespace JsonAutoService.Service
     public interface IJsonAutoService
     {
         Task<SqlString> SqlGetAsync(string conString, string jsonHeaders, string procName, string jsonParams);
+
         Task<PutResult> SqlPutAsync(string conString, string jsonHeaders, string procName, string jsonParams, string jsonBody);
+
         Task<PostResult> SqlPostAsync(string conString, string jsonHeaders, string procName, string jsonParams, string jsonBody);
+        Task<PostResult> SqlPostAsync(ActionContext context, string jsonHeaders, string procName, string jsonParams, string jsonBody);
+
         Task<DeleteResult> SqlDeleteAsync(string conString, string jsonHeaders, string procName, string jsonParams);
+
         Task<SqlBoolean> SqlHeadAsync(string conString, string jsonHeaders, string procName, string jsonParams);
 
         ContentResult JsonPostContentResult(PostResult postResult, string mode, int errorThreshold);

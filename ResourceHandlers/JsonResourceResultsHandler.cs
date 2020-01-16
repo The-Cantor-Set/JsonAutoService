@@ -37,7 +37,8 @@ namespace JsonAutoService.ResourceHandlers
             var jsonHeaders = JsonConvert.SerializeObject(headerDictionary);
 
             //Get connection string
-            var sqlConnection = httpContext.Items[_options.ConnectionStringName].ToString();
+            var sqlConnection = _options.ConnectionString;
+            //var sqlConnection = httpContext.Items[_options.ConnectionStringName].ToString();
 
             //Handle request
             using (var reader = new StreamReader(request.Body))
