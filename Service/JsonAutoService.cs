@@ -18,7 +18,8 @@ namespace JsonAutoService.Service
 {
     /// <summary>
     /// 
-    /// C# library to automate the creation of remote procedure calls.  This is the Sql Server implementation.
+    /// The Enterprise Database First (EDF) API framework for .NET Core
+    /// (deprecated) C# library to automate the creation of remote procedure calls.  This is the Sql Server implementation.
     /// 
     /// </summary>
     public partial class JsonAutoService : IJsonAutoService
@@ -281,6 +282,13 @@ namespace JsonAutoService.Service
 
         public ContentResult JsonGetContentResult(string getResponse = null)
         {
+            if (getResponse == "Null")
+            {
+                return new ContentResult
+                {
+                    StatusCode = StatusCodes.Status200OK
+                };
+            }
             return new ContentResult
             {
                 ContentType = MediaTypeNames.Application.Json,
