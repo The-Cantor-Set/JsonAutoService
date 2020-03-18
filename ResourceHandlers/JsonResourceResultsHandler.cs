@@ -38,7 +38,6 @@ namespace JsonAutoService.ResourceHandlers
 
             //Get connection string
             var sqlConnection = _options.ConnectionString;
-            //var sqlConnection = httpContext.Items[_options.ConnectionStringName].ToString();
 
             //Handle request
             using (var reader = new StreamReader(request.Body))
