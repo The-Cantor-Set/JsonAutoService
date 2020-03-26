@@ -52,7 +52,7 @@ namespace JsonAutoService.Service
                 {
                     if (sqlDataReader.HasRows)
                     {
-                        SqlString sqlString;
+                        SqlString sqlString = SqlString.Null;
                         while (await sqlDataReader.ReadAsync())
                         {
                             sqlString = (sqlString.IsNull) ? sqlDataReader.GetSqlString(0).Value : SqlString.Add(sqlString, sqlDataReader.GetSqlString(0).Value);
