@@ -57,7 +57,7 @@ stages:
        command: 'pack'
        packagesToPack: '**/*.csproj'
        versioningScheme: 'byPrereleaseNumber'
-       majorVersion: '1'
+       majorVersion: '2'
        minorVersion: '0'
        patchVersion: '0'
     - task: DotNetCoreCLI@2
