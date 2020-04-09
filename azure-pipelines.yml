@@ -37,7 +37,7 @@ stages:
        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 - stage: Publish
   displayName: "Publish nuget"
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - job: PublishJob
     displayName: "Publish nuget job"
