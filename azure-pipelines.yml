@@ -37,7 +37,7 @@ stages:
        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 - stage: Publish
   displayName: "Publish nuget"
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/nuget-version'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master))
   jobs:
   - job: PublishJob
     displayName: "Publish nuget job"
@@ -71,7 +71,6 @@ stages:
        packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
        nuGetFeedType: 'internal'
        publishVstsFeed: '056601d6-dfaa-4347-b739-d744df6a7c63'
-       arguments: '--skip-duplicate'
     - task: PublishBuildArtifacts@1
       displayName: 'publish build artifacts'
       inputs:
