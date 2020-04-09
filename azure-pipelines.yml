@@ -71,6 +71,7 @@ stages:
        packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
        nuGetFeedType: 'internal'
        publishVstsFeed: '056601d6-dfaa-4347-b739-d744df6a7c63'
+       allowPackageConflicts: true
     - task: PublishBuildArtifacts@1
       displayName: 'publish build artifacts'
       inputs:
