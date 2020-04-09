@@ -44,12 +44,6 @@ stages:
     pool:
      vmImage: 'vs2017-win2016'
     steps:
-    - task: PowerShell@2
-      displayName: 'Extract Package Version'
-      inputs:
-        targetType: filePath
-        filePath: ./ExtractPackageVersion.ps1
-        arguments: '"JsonAutoService.csproj"'
     - task: DotNetCoreCLI@2
       displayName: 'dotnet publish'
       inputs:
