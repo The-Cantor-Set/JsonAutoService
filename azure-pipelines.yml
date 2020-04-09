@@ -37,13 +37,19 @@ stages:
        arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
 - stage: Publish
   displayName: "Publish nuget"
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/nuget-version'))
   jobs:
   - job: PublishJob
     displayName: "Publish nuget job"
     pool:
      vmImage: 'vs2017-win2016'
     steps:
+    - task: PowerShell@2
+      displayName: 'Extract Package Version'
+      inputs:
+        targetType: filePath
+        filePath: ./ExtractPackageVersion.ps1
+        arguments: '"JsonAutoService.csproj"'
     - task: DotNetCoreCLI@2
       displayName: 'dotnet publish'
       inputs:
