@@ -44,6 +44,12 @@ stages:
     pool:
      vmImage: 'Ubuntu 16.04'
     steps:
+    - task: PowerShell@2
+      displayName: 'Extract Package Version'
+      inputs:
+        targetType: filePath
+        filePath: ./ExtractPackageVersion.ps1
+        arguments: '"JsonAutoService.csproj"'
     - task: DotNetCoreCLI@2
       displayName: 'dotnet publish'
       inputs:
@@ -56,10 +62,8 @@ stages:
       inputs:
        command: 'pack'
        packagesToPack: '**/*.csproj'
-       versioningScheme: 'byPrereleaseNumber'
-       majorVersion: '2'
-       minorVersion: '0'
-       patchVersion: '0'
+       versioningScheme: 'byEnvVar'
+       versionEnvVar: PackageVersion
     - task: DotNetCoreCLI@2
       displayName: 'nuget push'
       inputs:
