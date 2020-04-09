@@ -15,7 +15,7 @@ stages:
   - job: BuildJob
     displayName: "Build job"
     pool:
-     vmImage: 'vs2017-win2016'
+     vmImage: 'Ubuntu 16.04'
     steps:
     - script: dotnet restore
       displayName: 'dotnet restore'
@@ -27,7 +27,7 @@ stages:
   - job: TestsJob
     displayName: "Unit tests job"
     pool:
-     vmImage: 'vs2017-win2016'
+     vmImage: 'Ubuntu 16.04'
     steps:
     - task: DotNetCoreCLI@2
       displayName: 'dotnet test $(buildConfiguration)'
@@ -42,7 +42,7 @@ stages:
   - job: PublishJob
     displayName: "Publish nuget job"
     pool:
-     vmImage: 'vs2017-win2016'
+     vmImage: 'Ubuntu 16.04'
     steps:
     - task: PowerShell@2
       displayName: 'Extract Package Version'
