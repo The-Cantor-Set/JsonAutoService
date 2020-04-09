@@ -62,6 +62,8 @@ stages:
       inputs:
        command: 'pack'
        packagesToPack: '**/*.csproj'
+       versioningScheme: 'byEnvVar'
+       versionEnvVar: '$(majorVersion).$(minorVersion).$(patchVersion)'
        majorVersion: '$(majorVersion)'
        minorVersion: '$(minorVersion)'
        patchVersion: '$(patchVersion)'
