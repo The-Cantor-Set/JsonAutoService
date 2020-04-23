@@ -24,6 +24,8 @@ namespace JsonAutoService.Service
     /// </summary>
     public partial class JsonAutoService : IJsonAutoService
     {
+        private const string Json = "application/json";
+
         private readonly ILogger<JsonAutoServiceOptions> _logger;
         private readonly JsonAutoServiceOptions _options;
 
@@ -213,7 +215,7 @@ namespace JsonAutoService.Service
                 {
                     StatusCode = StatusCodes.Status201Created,
                     Content = postResponse.Body.ToString(),
-                    ContentType = MediaTypeNames.Application.Json
+                    ContentType = Json
                 };
             }
             else
@@ -225,7 +227,7 @@ namespace JsonAutoService.Service
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Content = JsonConvert.SerializeObject(errorMessage),
-                    ContentType = MediaTypeNames.Application.Json
+                    ContentType = Json
                 };
             }
         }
@@ -238,7 +240,7 @@ namespace JsonAutoService.Service
                 {
                     StatusCode = StatusCodes.Status201Created,
                     Content = putResponse.Body.ToString(),
-                    ContentType = MediaTypeNames.Application.Json
+                    ContentType = Json
                 };
             }
             else
@@ -250,7 +252,7 @@ namespace JsonAutoService.Service
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Content = JsonConvert.SerializeObject(errorMessage),
-                    ContentType = MediaTypeNames.Application.Json
+                    ContentType = Json
                 };
             }
         }
@@ -263,7 +265,7 @@ namespace JsonAutoService.Service
                 {
                     StatusCode = StatusCodes.Status201Created,
                     Content = deleteResponse.Body.ToString(),
-                    ContentType = MediaTypeNames.Application.Json
+                    ContentType = Json
                 };
             }
             else
@@ -275,7 +277,7 @@ namespace JsonAutoService.Service
                 {
                     StatusCode = StatusCodes.Status400BadRequest,
                     Content = JsonConvert.SerializeObject(errorMessage),
-                    ContentType = MediaTypeNames.Application.Json
+                    ContentType = Json
                 };
             }
         }
@@ -291,7 +293,7 @@ namespace JsonAutoService.Service
             }
             return new ContentResult
             {
-                ContentType = MediaTypeNames.Application.Json,
+                ContentType = Json,
                 StatusCode = StatusCodes.Status200OK,
                 Content = (!String.IsNullOrEmpty(getResponse)) ? getResponse : JsonConvert.SerializeObject(_options.DefaultErrorMessages[SupportedMethods.GET])
             };
@@ -311,7 +313,7 @@ namespace JsonAutoService.Service
             {
                 StatusCode = StatusCodes.Status405MethodNotAllowed,
                 Content = JsonConvert.SerializeObject(new { errorMessage = _options.DefaultErrorMessages["Default"] }),
-                ContentType = MediaTypeNames.Application.Json
+                ContentType = Json
             };
         }
 
@@ -321,7 +323,7 @@ namespace JsonAutoService.Service
             {
                 StatusCode = StatusCodes.Status400BadRequest,
                 Content = JsonConvert.SerializeObject(errorMessage),
-                ContentType = MediaTypeNames.Application.Json
+                ContentType = Json
             };
         }
 
