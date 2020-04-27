@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.0.3</Version>
+    <Version>2.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageId>ReenbitAutoService</PackageId>
+    <PackageId>JsonAutoService</PackageId>
     <Authors>Relatable Technologies Partners</Authors>
     <Company>Relatable Technologies</Company>
     <Product>Relatable Technologies</Product>
