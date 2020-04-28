@@ -1,79 +1,35 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - master  
+pool:
+  vmImage: 'windows-latest'
 variables:
-  buildConfiguration: 'Release'
+  BuildConfiguration: 'Release'
 
-stages:
-- stage: Build
-  displayName: "Build solution"
-  jobs:
-  - job: BuildJob
-    displayName: "Build job"
-    pool:
-     vmImage: 'Ubuntu 16.04'
-    steps:
-    - script: dotnet restore
-      displayName: 'dotnet restore'
-    - script: dotnet build --configuration $(buildConfiguration)
-      displayName: 'dotnet build $(buildConfiguration)'
-- stage: Tests
-  displayName: "Unit tests"
-  jobs:
-  - job: TestsJob
-    displayName: "Unit tests job"
-    pool:
-     vmImage: 'Ubuntu 16.04'
-    steps:
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet test $(buildConfiguration)'
-      inputs:
-       command: test
-       projects: '**/*Tests/*.csproj'
-       arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
-- stage: Publish
-  displayName: "Publish nuget"
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: restore
+    projects: 'src\JsonAutoService\*.csproj'
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: 'src\JsonAutoService\*.csproj'
+    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+- task: NuGetCommand@2
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  jobs:
-  - job: PublishJob
-    displayName: "Publish nuget job"
-    pool:
-     vmImage: 'Ubuntu 16.04'
-    steps:
-    - task: PowerShell@2
-      displayName: 'Extract Package Version'
-      inputs:
-        targetType: filePath
-        filePath: ./ExtractPackageVersion.ps1
-        arguments: '"JsonAutoService.csproj"'
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet publish'
-      inputs:
-       command: 'publish'
-       publishWebProjects: false
-       projects: '**/*.csproj'
-       arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    - task: DotNetCoreCLI@2
-      displayName: 'dotnet pack'
-      inputs:
-       command: 'pack'
-       packagesToPack: '**/*.csproj'
-       versioningScheme: 'byEnvVar'
-       versionEnvVar: PackageVersion
-    - task: DotNetCoreCLI@2
-      displayName: 'nuget push'
-      inputs:
-       command: 'push'
-       packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-       nuGetFeedType: 'internal'
-       publishVstsFeed: '056601d6-dfaa-4347-b739-d744df6a7c63'
-    - task: PublishBuildArtifacts@1
-      displayName: 'publish build artifacts'
-      inputs:
-       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-       ArtifactName: 'drop'
-       publishLocation: 'Container'
+  displayName: 'Push package to nuget.org'
+  inputs:
+    command: push
+    packagesToPush: 'src\JsonAutoService\bin\Release\*.nupkg'
+    nuGetFeedType: external
+    publishFeedCredentials: nuget.org
+- task: NuGetCommand@2
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: 'Push package to internal feed'
+  inputs:
+    command: push
+    packagesToPush: 'src\JsonAutoService\bin\Release\*.nupkg'
+    publishVstsFeed: '056601d6-dfaa-4347-b739-d744df6a7c63'
