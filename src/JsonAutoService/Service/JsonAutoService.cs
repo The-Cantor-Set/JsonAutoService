@@ -18,8 +18,7 @@ namespace JsonAutoService.Service
 {
     /// <summary>
     /// 
-    /// The Enterprise Database First (EDF) API framework for .NET Core
-    /// (deprecated) C# library to automate the creation of remote procedure calls.  This is the Sql Server implementation.
+    /// The Database First (EDF) API framework for .NET Core
     /// 
     /// </summary>
     public partial class JsonAutoService : IJsonAutoService
