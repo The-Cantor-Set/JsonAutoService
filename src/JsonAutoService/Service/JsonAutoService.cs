@@ -18,7 +18,7 @@ namespace JsonAutoService.Service
 {
     /// <summary>
     /// 
-    /// The Database First (EDF) API framework for .NET Core
+    /// The Database First (DF) API framework for .NET Core
     /// 
     /// </summary>
     public partial class JsonAutoService : IJsonAutoService
