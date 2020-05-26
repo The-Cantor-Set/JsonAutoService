@@ -47,7 +47,7 @@ go
 drop table if exists jas.products;
 go
 create table jas.products(
-  p_id                   bigint identity(1,1) constraint pk_products unique not null,
+  p_id                   bigint identity(1,1) constraint pk_products primary key not null,
   product_name           nvarchar(20) unique not null,
   created_dt             datetime2 not null);
 go
@@ -55,7 +55,7 @@ go
 drop table if exists jas.options;
 go
 create table jas.options(
-  o_id                bigint identity(1,1) constraint pk_ingredients unique not null,
+  o_id                bigint identity(1,1) constraint pk_ingredients primary key not null,
   option_name         nvarchar(20) unique not null,
   created_dt          datetime2 not null);
 go
@@ -63,7 +63,7 @@ go
 drop table if exists jas.product_options;
 go
 create table jas.product_options(
-  po_id                 bigint identity(1,1) constraint pk_products_options unique not null,
+  po_id                 bigint identity(1,1) constraint pk_products_options primary key not null,
   p_id                  bigint constraint fk_products references jas.products(p_id) not null,
   o_id                  bigint constraint fk_options references jas.options(o_id) not null,
   product_option        nvarchar(20) null,
@@ -108,21 +108,6 @@ set xact_abort on;
 begin transaction
 begin try
     declare
-      @check_isjson         int=nullif(json_value(@headers, N'$.check_isjson'), 0);
-
-    if @check_isjson=1
-        begin
-            if isjson(@headers)=0
-                throw 50000, 'The headers json is invalid', 1;
-
-            if isjson(@params)=0
-                throw 50000, 'The parameters json is invalid', 1;
-
-            if isjson(@body)=0
-                throw 50000, 'The request body json is invalid', 1;
-        end
-
-    declare
       @p_id                 bigint,
       @p_count              bigint;
 
@@ -164,21 +149,6 @@ set xact_abort on;
 
 begin transaction
 begin try
-    declare
-      @check_isjson         int=nullif(json_value(@headers, N'$.check_isjson'), 0);
-
-    if @check_isjson=1
-        begin
-            if isjson(@headers)=0
-                throw 50000, 'The headers json is invalid', 1;
-
-            if isjson(@params)=0
-                throw 50000, 'The parameters json is invalid', 1;
-
-            if isjson(@body)=0
-                throw 50000, 'The request body json is invalid', 1;
-        end
-
     declare
       @o                   table(o_id               bigint unique not null,
                                  product_name       nvarchar(20));
