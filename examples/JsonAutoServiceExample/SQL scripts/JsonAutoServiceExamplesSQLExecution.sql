@@ -28,7 +28,7 @@ declare
   @out_response     nvarchar(max);
 
 exec jas.api_product_post 
-    @headers = '{ "check_isjson": 1 }',
+    @headers = null,
     @params = null,
     @body='{ "product_name": "Phone 1" }',
     @test_id=@out_test_id output,
@@ -51,7 +51,7 @@ declare
   @out_response     nvarchar(max);
 
 exec jas.api_product_post 
-    @headers = '{ "check_isjson": 1 }',
+    @headers = null,
     @params = null,
     @body='{ "product_name": "Phone 2" }',
     @test_id=@out_test_id output,
