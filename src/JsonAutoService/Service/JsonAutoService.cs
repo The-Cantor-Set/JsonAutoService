@@ -130,7 +130,6 @@ namespace JsonAutoService.Service
             _logger.LogInformation($"Sql Post params: {jsonHeaders}, {procName}, {jsonParams}, {jsonBody}");
 
             var conString = _options.ConnectionString;
-            //var conString = context.HttpContext.Items[_options.ConnectionStringName].ToString();
 
             using (var sqlCon = new SqlConnection(conString))
             using (var sqlCmd = new SqlCommand(procName, sqlCon))

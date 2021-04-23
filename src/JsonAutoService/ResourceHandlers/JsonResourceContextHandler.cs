@@ -36,7 +36,7 @@ namespace JsonAutoService.ResourceHandlers
 
             //Serialize Routes
             var jsonRoutes = JsonConvert.SerializeObject(context.RouteData.Values);
-
+            
             //Serialize Headers
             var headerDictionary = _jsonAutoService.GetHeadersDictionary(request.Headers, user);
             var jsonHeaders = JsonConvert.SerializeObject(headerDictionary);
@@ -60,6 +60,7 @@ namespace JsonAutoService.ResourceHandlers
                         stopWatch.Start();
                         httpContext.Items[nameof(GetResult)] = new GetResult(await _jsonAutoService.SqlGetAsync(sqlConnection, jsonHeaders, procName, jsonRoutes));
                         stopWatch.Stop();
+                        
                         var ts1 = stopWatch.Elapsed;
                         var elapsedTime1 = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
                             ts1.Hours, ts1.Minutes, ts1.Seconds,
