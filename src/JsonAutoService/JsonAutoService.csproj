@@ -8,7 +8,7 @@
     <Authors>Relatable Technologies Partners</Authors>
     <Company>Relatable Technologies</Company>
     <Product>Relatable Technologies</Product>
-    <Description>FilterData Access aframework for .NET Core</Description>
+    <Description>Data Access aframework for .NET Core</Description>
   </PropertyGroup>
 
   <ItemGroup>
