@@ -10,7 +10,7 @@ using System.Text;
 
 namespace JsonAutoService.Swashbuckle
 {
-    class RelatableOperationId
+    public class RelatableOperationId
     {
         [JsonProperty("resource_handler")]
         public string ResourceHandler { get; set; }
