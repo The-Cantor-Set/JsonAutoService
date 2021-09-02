@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace JsonAutoService.Swashbuckle
 {
-    class RelatableOperationFilter : IOperationFilter
+    public class RelatableOperationFilter : IOperationFilter
     {
         private readonly IDictionary<string, string> _requiredHeaders;
 
